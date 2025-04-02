@@ -1,0 +1,71 @@
+# Python
+*.py[cod]
+__pycache__/
+.venv/
+venv/
+env/
+*.egg-info/
+*.egg
+dist/
+build/
+develop-eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.manifest
+.python-version
+
+# React
+node_modules/
+build/
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# General OS generated files
+.DS_Store
+Thumbs.db
+*.swp
+
+# IDE Specific files
+.idea/
+*.iml
+.vscode/
+
+# Logs and temp files
+*.log
+tmp/
+temp/
+*.tmp
+
+# Optional - If you are using specific tools
+# Example for poetry
+poetry.lock
+
+# Example for docker
+# docker-compose.yml
+# Dockerfile
+
+# Example for data files (if you don't want them tracked)
+# *.csv
+# *.json
+# data/
+
+# Example for compiled assets
+# static/
+# public/
