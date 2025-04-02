@@ -1,42 +1,33 @@
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8000';
-
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import axios from 'axios'
 
 export interface Stock {
-  symbol: string;
-  name: string;
-  market_cap: number;
-  sector?: string;
+  symbol: string
+  name: string
+  market_cap: number
+  sector: string
 }
 
 export interface NewsArticle {
-  title: string;
-  description?: string;
-  url: string;
-  published_at: string;
-  source: string;
+  title: string
+  description: string
+  url: string
+  published_at: string
+  source: string
+  sentiment: string
   sentiment_scores: {
-    compound: number;
-    pos: number;
-    neg: number;
-    neu: number;
-  };
-  sentiment: 'positive' | 'negative' | 'neutral';
-  relevance_score: number;
-  related_stocks: string[];
+    pos: number
+    neg: number
+    neu: number
+  }
 }
+
+const apiClient = axios.create({
+  baseURL: 'http://localhost:8002'
+})
 
 export const api = {
   getStocks: () => apiClient.get<Stock[]>('/stocks'),
   getStock: (symbol: string) => apiClient.get<Stock>(`/stocks/${symbol}`),
   getNews: () => apiClient.get<NewsArticle[]>('/news'),
-  getStockNews: (symbol: string) => apiClient.get<NewsArticle[]>(`/news/${symbol}`),
-  getTrendingNews: () => apiClient.get<NewsArticle[]>('/trending'),
-};
+  getStockNews: (symbol: string) => apiClient.get<NewsArticle[]>(`/news/${symbol}`)
+}

@@ -1,5 +1,6 @@
-from typing import List
-from ..models import Stock
+import json
+from typing import List, Optional
+from models import Stock
 
 class StockService:
     def __init__(self):

@@ -1,7 +1,7 @@
 import requests
-from datetime import datetime
 from typing import List, Optional
-from ..models import NewsArticle
+from datetime import datetime
+from models import NewsArticle
 from .sentiment_service import SentimentService
 from .relevance_service import RelevanceService
 
@@ -60,7 +60,7 @@ class NewsService:
 
     def _extract_stock_mentions(self, text: str) -> List[str]:
         """Extract stock symbols from text"""
-        from ..services.stock_service import StockService
+        from services.stock_service import StockService
         stock_service = StockService()
         stock_symbols = stock_service.get_stock_symbols()
         

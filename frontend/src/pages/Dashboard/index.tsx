@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Grid, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { api, Stock, NewsArticle } from '../../api/client'
 import StockList from './components/StockList'
 import TrendingNews from './components/TrendingNews'
@@ -15,7 +15,7 @@ export default function Dashboard() {
       try {
         const [stocksResponse, newsResponse] = await Promise.all([
           api.getStocks(),
-          api.getTrendingNews()
+          api.getNews()
         ])
         setStocks(stocksResponse.data)
         setTrendingNews(newsResponse.data)
@@ -39,13 +39,9 @@ export default function Dashboard() {
   }
 
   return (
-    <Grid container spacing={4}>
-      <Grid item xs={12} md={4}>
-        <StockList stocks={stocks} loading={loading} />
-      </Grid>
-      <Grid item xs={12} md={8}>
-        <TrendingNews news={trendingNews} loading={loading} />
-      </Grid>
-    </Grid>
+    <Box sx={{ display: 'grid', gap: 4, gridTemplateColumns: { xs: '1fr', md: '1fr 2fr' } }}>
+      <StockList stocks={stocks} loading={loading} />
+      <TrendingNews news={trendingNews} loading={loading} />
+    </Box>
   )
 }

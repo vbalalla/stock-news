@@ -1,8 +1,9 @@
+from transformers import pipeline
 from typing import List, Dict, Optional
 import re
 from collections import Counter
-from ..models import NewsArticle
-from .stock_service import StockService
+from models import NewsArticle
+from services.stock_service import StockService
 
 class RelevanceService:
     def __init__(self):

@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from .models import NewsArticle, Stock
-from .services.news_service import NewsService
-from .services.stock_service import StockService
+from models import NewsArticle, Stock
+from services.news_service import NewsService
+from services.stock_service import StockService
 import os
 from dotenv import load_dotenv
 import logging
@@ -18,11 +18,11 @@ logger.info(f"Loaded NEWS_API_KEY: {'Present' if api_key else 'Missing'}")
 
 app = FastAPI(title="StockPulse Insights API")
 
-# CORS middleware
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=["http://localhost:5173", "http://localhost:5174"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

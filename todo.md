@@ -73,10 +73,10 @@
     * [x] Display a stock list.
 
 13. **Stock Details Page:**
-    * [ ] Create the stock details page.
-    * [ ] Display stock-specific news feed.
-    * [ ] Visualize sentiment analysis using charts.
-    * [ ] Display news summaries.
+    * [x] Create the stock details page.
+    * [x] Display stock-specific news feed.
+    * [x] Visualize sentiment analysis using charts.
+    * [x] Display news summaries.
 
 14. **User Authentication:**
     * [ ] Implement user registration and login functionality in the backend.
