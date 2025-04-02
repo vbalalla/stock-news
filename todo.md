@@ -61,16 +61,16 @@
 **Phase 3: Frontend & User Authentication**
 
 11. **React Project Setup:**
-    * [ ] Create a React project using Create React App or Vite.
-    * [ ] Set up TypeScript.
-    * [ ] Choose and install UI and charting libraries.
-    * [ ] Setup Axios or fetch for API calls.
+    * [x] Create a React project using Create React App or Vite.
+    * [x] Set up TypeScript.
+    * [x] Choose and install UI and charting libraries.
+    * [x] Setup Axios or fetch for API calls.
 
 12. **Dashboard Component:**
-    * [ ] Create the dashboard component.
-    * [ ] Display trending news.
-    * [ ] Implement a search bar for stocks.
-    * [ ] Display a stock watchlist (initially static).
+    * [x] Create the dashboard component.
+    * [x] Display trending news.
+    * [x] Implement a search bar for stocks.
+    * [x] Display a stock list.
 
 13. **Stock Details Page:**
     * [ ] Create the stock details page.
