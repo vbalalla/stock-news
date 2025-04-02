@@ -25,10 +25,9 @@ def test_stock_service():
     assert "JPM" in symbols
     assert "V" in symbols
 
+@pytest.mark.skipif(not os.getenv("NEWS_API_KEY"), reason="NEWS_API_KEY not set")
 def test_news_service():
     api_key = os.getenv("NEWS_API_KEY")
-    assert api_key is not None, "NEWS_API_KEY environment variable is not set"
-    
     service = NewsService(api_key=api_key)
     
     # Test news fetching
@@ -36,10 +35,14 @@ def test_news_service():
         news = service.get_news()
         assert isinstance(news, list)
         if len(news) > 0:
-            assert isinstance(news[0], NewsArticle)
-            assert isinstance(news[0].published_at, datetime)
-            assert news[0].title is not None
-            assert news[0].url is not None
+            article = news[0]
+            assert isinstance(article, NewsArticle)
+            assert isinstance(article.published_at, datetime)
+            assert article.title is not None
+            assert article.url is not None
+            assert isinstance(article.sentiment_scores, dict)
+            assert "compound" in article.sentiment_scores
+            assert article.sentiment in ["positive", "negative", "neutral"]
     except Exception as e:
         pytest.skip(f"Skipping news API test due to error: {str(e)}")
     
@@ -48,6 +51,9 @@ def test_news_service():
         trending = service.get_trending_news()
         assert isinstance(trending, list)
         assert len(trending) <= 10
+        if len(trending) > 1:
+            # Check if articles are sorted by sentiment
+            assert trending[0].sentiment_scores["compound"] >= trending[-1].sentiment_scores["compound"]
     except Exception as e:
         pytest.skip(f"Skipping trending news test due to error: {str(e)}")
 

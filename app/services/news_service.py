@@ -2,13 +2,14 @@ import requests
 from datetime import datetime
 from typing import List, Optional
 from ..models import NewsArticle
-import json
+from .sentiment_service import SentimentService
 
 class NewsService:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.base_url = "https://newsapi.org/v2"
         self._news_cache = []  # In-memory storage for news articles
+        self.sentiment_service = SentimentService()
 
     def fetch_news(self, query: str = None) -> List[NewsArticle]:
         """Fetch news from NewsAPI"""
@@ -29,19 +30,27 @@ class NewsService:
             response.raise_for_status()
             articles = response.json().get("articles", [])
             
-            return [
-                NewsArticle(
+            processed_articles = []
+            for article in articles:
+                # Create article object
+                news_article = NewsArticle(
                     title=article["title"],
-                    description=article.get("description"),
+                    description=article.get("description", ""),
                     url=article["url"],
                     published_at=datetime.fromisoformat(article["publishedAt"].replace("Z", "+00:00")),
                     source=article["source"]["name"],
-                    sentiment=0.0,  # Placeholder for sentiment analysis
-                    relevance_score=1.0,  # Placeholder for relevance scoring
                     related_stocks=self._extract_stock_mentions(article["title"] + " " + (article.get("description") or ""))
                 )
-                for article in articles
-            ]
+                
+                # Analyze sentiment
+                text = f"{news_article.title} {news_article.description}"
+                sentiment_scores = self.sentiment_service.analyze_text(text)
+                news_article.sentiment_scores = sentiment_scores
+                news_article.sentiment = self.sentiment_service.get_sentiment_label(sentiment_scores["compound"])
+                
+                processed_articles.append(news_article)
+            
+            return processed_articles
         except requests.exceptions.RequestException as e:
             raise Exception(f"NewsAPI error: {str(e)}")
 
@@ -71,13 +80,13 @@ class NewsService:
         return self._news_cache
 
     def get_trending_news(self) -> List[NewsArticle]:
-        """Get trending news across all stocks"""
+        """Get trending news across all stocks, prioritizing positive sentiment"""
         if not self._news_cache:
             self._news_cache = self.fetch_news()
         
-        # Sort by relevance score and return top 10
+        # Sort by compound sentiment score and return top 10
         return sorted(
             self._news_cache,
-            key=lambda x: x.relevance_score or 0,
+            key=lambda x: x.sentiment_scores["compound"],
             reverse=True
         )[:10]

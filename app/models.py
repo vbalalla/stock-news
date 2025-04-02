@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict
 from datetime import datetime
 
 class Stock(BaseModel):
@@ -14,6 +14,7 @@ class NewsArticle(BaseModel):
     url: str
     published_at: datetime
     source: str
-    sentiment: Optional[float] = None
+    sentiment_scores: Dict[str, float] = {"compound": 0.0, "pos": 0.0, "neg": 0.0, "neu": 1.0}
+    sentiment: str = "neutral"
     relevance_score: Optional[float] = None
     related_stocks: List[str] = []

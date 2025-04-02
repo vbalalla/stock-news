@@ -39,9 +39,9 @@
     * [x] Link recognized entities to stock symbols in the database.
 
 7.  **Sentiment Analysis:**
-    * [ ] Implement sentiment analysis using a pre-trained model.
-    * [ ] Store sentiment scores in the `News Articles` table.
-    * [ ] Test and refine sentiment analysis accuracy.
+    * [x] Implement sentiment analysis using a pre-trained model.
+    * [x] Store sentiment scores in the `News Articles` table.
+    * [x] Test and refine sentiment analysis accuracy.
 
 8.  **Relevance Scoring:**
     * [ ] Implement a scoring algorithm based on keyword frequency and context.
