@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 from ..models import NewsArticle
 from .sentiment_service import SentimentService
+from .relevance_service import RelevanceService
 
 class NewsService:
     def __init__(self, api_key: str):
@@ -10,6 +11,7 @@ class NewsService:
         self.base_url = "https://newsapi.org/v2"
         self._news_cache = []  # In-memory storage for news articles
         self.sentiment_service = SentimentService()
+        self.relevance_service = RelevanceService()
 
     def fetch_news(self, query: str = None) -> List[NewsArticle]:
         """Fetch news from NewsAPI"""
@@ -50,6 +52,8 @@ class NewsService:
                 
                 processed_articles.append(news_article)
             
+            # Score articles for relevance
+            processed_articles = self.relevance_service.score_articles(processed_articles)
             return processed_articles
         except requests.exceptions.RequestException as e:
             raise Exception(f"NewsAPI error: {str(e)}")
@@ -72,21 +76,24 @@ class NewsService:
         if not self._news_cache:
             self._news_cache = self.fetch_news()
 
+        articles = [
+            article for article in self._news_cache
+            if not stock_symbol or stock_symbol in article.related_stocks
+        ]
+        
+        # Score articles specifically for the requested stock
         if stock_symbol:
-            return [
-                article for article in self._news_cache
-                if stock_symbol in article.related_stocks
-            ]
-        return self._news_cache
+            articles = self.relevance_service.score_articles(articles, stock_symbol)
+        return articles
 
     def get_trending_news(self) -> List[NewsArticle]:
-        """Get trending news across all stocks, prioritizing positive sentiment"""
+        """Get trending news across all stocks, prioritizing positive sentiment and relevance"""
         if not self._news_cache:
             self._news_cache = self.fetch_news()
         
-        # Sort by compound sentiment score and return top 10
+        # Sort by a combination of sentiment and relevance
         return sorted(
             self._news_cache,
-            key=lambda x: x.sentiment_scores["compound"],
+            key=lambda x: (x.sentiment_scores["compound"] + (x.relevance_score or 0)) / 2,
             reverse=True
         )[:10]

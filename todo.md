@@ -44,10 +44,10 @@
     * [x] Test and refine sentiment analysis accuracy.
 
 8.  **Relevance Scoring:**
-    * [ ] Implement a scoring algorithm based on keyword frequency and context.
-    * [ ] Store relevance scores in the `News Articles` table.
-    * [ ] Link news articles to stocks via the `Stock News Relations` table.
-    * [ ] Test and refine relevance scoring.
+    * [x] Implement a scoring algorithm based on keyword frequency and context.
+    * [x] Store relevance scores in the `News Articles` table.
+    * [x] Link news articles to stocks via related_stocks field.
+    * [x] Test and refine relevance scoring.
 
 9.  **Stock Data Integration:**
     * [ ] Integrate a financial API (Alpha Vantage, Polygon.io).
