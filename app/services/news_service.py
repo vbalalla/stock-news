@@ -21,12 +21,12 @@ class NewsService:
             "language": "en",
             "sortBy": "publishedAt",
             "pageSize": 100,
-            "q": query if query else "stock market OR finance OR investing"  # Default query
+            "q": query if query else "(NYSE OR 'New York Stock Exchange') AND (stock OR market OR trading)"
         }
 
         try:
             response = requests.get(endpoint, params=params)
-            response.raise_for_status()  # Raises HTTPError for bad responses
+            response.raise_for_status()
             articles = response.json().get("articles", [])
             
             return [
@@ -38,12 +38,25 @@ class NewsService:
                     source=article["source"]["name"],
                     sentiment=0.0,  # Placeholder for sentiment analysis
                     relevance_score=1.0,  # Placeholder for relevance scoring
-                    related_stocks=[]
+                    related_stocks=self._extract_stock_mentions(article["title"] + " " + (article.get("description") or ""))
                 )
                 for article in articles
             ]
         except requests.exceptions.RequestException as e:
             raise Exception(f"NewsAPI error: {str(e)}")
+
+    def _extract_stock_mentions(self, text: str) -> List[str]:
+        """Extract stock symbols from text"""
+        from ..services.stock_service import StockService
+        stock_service = StockService()
+        stock_symbols = stock_service.get_stock_symbols()
+        
+        # Simple extraction: check if stock symbol is mentioned in text
+        mentioned_stocks = []
+        for symbol in stock_symbols:
+            if symbol in text.upper().split():
+                mentioned_stocks.append(symbol)
+        return mentioned_stocks
 
     def get_news(self, stock_symbol: Optional[str] = None) -> List[NewsArticle]:
         """Get news articles, optionally filtered by stock symbol"""

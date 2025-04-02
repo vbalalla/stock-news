@@ -11,7 +11,19 @@ def test_stock_service():
     
     assert len(stocks) > 0
     assert isinstance(stocks[0], Stock)
-    assert stocks[0].symbol == "AAPL"
+    assert stocks[0].symbol == "JPM"  # First stock should be JPMorgan Chase
+    
+    # Test getting stock by symbol
+    jpm = service.get_stock_by_symbol("JPM")
+    assert jpm is not None
+    assert jpm.name == "JPMorgan Chase & Co."
+    assert jpm.sector == "Financial Services"
+    
+    # Test getting all stock symbols
+    symbols = service.get_stock_symbols()
+    assert len(symbols) == len(stocks)
+    assert "JPM" in symbols
+    assert "V" in symbols
 
 def test_news_service():
     api_key = os.getenv("NEWS_API_KEY")
